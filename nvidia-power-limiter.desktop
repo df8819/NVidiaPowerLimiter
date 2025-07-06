@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=NVIDIA Power Limiter
+Comment=Control NVIDIA GPU power limits with a graphical interface
+Exec=/path/to/your/run.sh
+Icon=nvidia-settings
+Terminal=false
+Type=Application
+Categories=System;Settings;HardwareSettings;
+StartupNotify=true
+Keywords=nvidia;gpu;power;limit;graphics;
