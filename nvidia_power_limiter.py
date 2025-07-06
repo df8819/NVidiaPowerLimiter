@@ -143,8 +143,8 @@ class NVidiaPowerLimiter:
             self.log_status("ERROR: This application must be run with sudo privileges.")
             messagebox.showerror("Sudo Required",
                                  "This application requires root privileges to modify GPU power limits.\n\n"
-                                 "Please run the application with:\n"
-                                 "sudo python nvidia_power_limiter.py\n\n"
+                                 "Please run the application with:\n\n"
+                                 "sudo python3 nvidia_power_limiter.py\n\n"
                                  "The application will now exit.")
             self.root.quit()
             return
@@ -227,11 +227,11 @@ class NVidiaPowerLimiter:
 
         success_count = 0
         for gpu_id in range(gpu_count):
-            # Set power limit command
+            # Set power limit command (no sudo needed since app runs as root)
             if self.permanent_var.get():
-                command = f"sudo nvidia-smi -i {gpu_id} -pl {power_limit} -pm 1"
+                command = f"nvidia-smi -i {gpu_id} -pl {power_limit} -pm 1"
             else:
-                command = f"sudo nvidia-smi -i {gpu_id} -pl {power_limit}"
+                command = f"nvidia-smi -i {gpu_id} -pl {power_limit}"
 
             returncode, stdout, stderr = self.run_nvidia_smi_command(command)
 
