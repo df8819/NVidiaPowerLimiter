@@ -34,9 +34,9 @@ Or use the provided launcher script:
 
 **Important**: The `run.sh` script contains hardcoded paths and must be customized for your system:
 
-1. Edit `run.sh` and update the path to match your installation directory
+1. Edit `run.sh` and update the path/shell to match your installation directory
 2. Make the script executable: `chmod +x run.sh`
-3. Optionally install the `.desktop` file for GUI launcher integration
+3. Optionally update/edit/install the `.desktop` file for GUI launcher integration
 
 ## Screenshot
 ![NVIDIA Power Limiter Interface](2025-07-06-1751808507.png)
