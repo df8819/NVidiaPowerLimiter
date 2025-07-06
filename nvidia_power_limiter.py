@@ -8,7 +8,7 @@ class NVidiaPowerLimiter:
     def __init__(self, root):
         self.root = root
         self.root.title("NVIDIA Power Limiter")
-        self.root.geometry("640x860")
+        self.root.geometry("700x860")
         # self.root.resizable(False, False)
 
         # Configure style
@@ -36,7 +36,7 @@ class NVidiaPowerLimiter:
                  font=('Arial', 10), bg='#f0f0f0').pack(anchor=tk.W)
 
         # Power slider
-        self.power_var = tk.IntVar(value=250)
+        self.power_var = tk.IntVar(value=300)
         self.power_slider = tk.Scale(slider_frame, from_=0, to=1000,
                                      orient=tk.HORIZONTAL, variable=self.power_var,
                                      length=400, bg='#f0f0f0',
@@ -227,31 +227,54 @@ class NVidiaPowerLimiter:
 
         success_count = 0
         for gpu_id in range(gpu_count):
-            # Set power limit command (no sudo needed since app runs as root)
+            gpu_success = True
+
+            # If permanent is checked, first enable persistence mode
             if self.permanent_var.get():
-                command = f"nvidia-smi -i {gpu_id} -pl {power_limit} -pm 1"
-            else:
-                command = f"nvidia-smi -i {gpu_id} -pl {power_limit}"
+                pm_command = f"nvidia-smi -i {gpu_id} -pm 1"
+                self.log_status(f"DEBUG: Executing persistence command: {pm_command}")
 
-            returncode, stdout, stderr = self.run_nvidia_smi_command(command)
+                returncode, stdout, stderr = self.run_nvidia_smi_command(pm_command)
+                self.log_status(f"DEBUG: Persistence mode - Return code: {returncode}")
+                if stderr.strip():
+                    self.log_status(f"DEBUG: Persistence mode - STDERR: {stderr.strip()}")
 
-            if returncode == 0:
+                if returncode != 0:
+                    self.log_status(f"✗ GPU {gpu_id}: Failed to enable persistence mode")
+                    self.log_status(f"  Error: {stderr.strip()}")
+                    gpu_success = False
+
+            # Set power limit command
+            pl_command = f"nvidia-smi -i {gpu_id} -pl {power_limit}"
+            self.log_status(f"DEBUG: Executing power limit command: {pl_command}")
+
+            returncode, stdout, stderr = self.run_nvidia_smi_command(pl_command)
+            self.log_status(f"DEBUG: Power limit - Return code: {returncode}")
+            if stdout.strip():
+                self.log_status(f"DEBUG: Power limit - STDOUT: {stdout.strip()}")
+            if stderr.strip():
+                self.log_status(f"DEBUG: Power limit - STDERR: {stderr.strip()}")
+
+            if returncode == 0 and gpu_success:
                 success_count += 1
-                self.log_status(f"✓ GPU {gpu_id}: Power limit set to {power_limit}W")
+                persistence_text = " with persistence mode" if self.permanent_var.get() else ""
+                self.log_status(f"✓ GPU {gpu_id}: Power limit set to {power_limit}W{persistence_text}")
             else:
                 self.log_status(f"✗ GPU {gpu_id}: Failed to set power limit")
-                self.log_status(f"  Error: {stderr.strip()}")
+                if stderr.strip():
+                    self.log_status(f"  Error: {stderr.strip()}")
 
         if success_count == gpu_count:
             permanent_text = " (permanent)" if self.permanent_var.get() else " (temporary)"
             self.log_status(f"SUCCESS: Power limit set to {power_limit}W for all GPUs{permanent_text}")
+            self.log_status("-" * 50)
             messagebox.showinfo("Success", f"Power limit set to {power_limit}W for all GPUs{permanent_text}")
         elif success_count > 0:
             self.log_status(f"PARTIAL SUCCESS: Power limit set for {success_count}/{gpu_count} GPUs")
             messagebox.showwarning("Partial Success", f"Power limit set for {success_count}/{gpu_count} GPUs")
         else:
             self.log_status("FAILED: Could not set power limit for any GPU")
-            messagebox.showerror("Error", "Failed to set power limit. Check if you have sudo privileges.")
+            messagebox.showerror("Error", "Failed to set power limit. Check the debug output above.")
 
     def check_active_limit(self):
         """Check current power limit settings"""
@@ -292,6 +315,7 @@ class NVidiaPowerLimiter:
                             self.log_status(f"GPU {gpu_id} ({gpu_name}):")
                             self.log_status(f"  Current Limit: {current_limit}W")
                             self.log_status(f"  Default Limit: {default_limit}W")
+                            self.log_status("-" * 50)
                         else:
                             self.log_status(f"GPU {gpu_id} ({gpu_name}): No custom limit set ({current_limit}W)")
                     except ValueError:
