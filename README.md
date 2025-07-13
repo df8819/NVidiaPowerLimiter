@@ -22,6 +22,8 @@ A simple GUI app for setting NVIDIA GPU power limits on Linux using `nvidia-smi`
 ```bash
 sudo python3 nvidia_power_limiter.py
 ```
+- `Set Power Limit` with **unckecked** "Make permanent" checkbox will only changes running session.
+- `Set Power Limit` with **checked** "Make permanent" checkbox will also persists on reboots.
 
 Or use the provided launcher script:  
 ```bash
