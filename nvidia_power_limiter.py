@@ -269,6 +269,20 @@ class NVidiaPowerLimiter:
             self.log_status(f"SUCCESS: Power limit set to {power_limit}W for all GPUs{permanent_text}")
             self.log_status("-" * 50)
             messagebox.showinfo("Success", f"Power limit set to {power_limit}W for all GPUs{permanent_text}")
+
+            # If permanent, write content to shell script for systemd service
+            if self.permanent_var.get():
+                script_path = "/usr/local/bin/set_gpu_power_limit.sh"
+                try:
+                    with open(script_path, "w") as f:
+                        f.write("#!/bin/bash\n\n")
+                        f.write(f"# Set power limit for NVIDIA GPU\n")
+                        f.write(f"nvidia-smi -pl {power_limit}\n")
+                    os.chmod(script_path, 0o755)
+                    self.log_status(f"✓ Wrote persistent power limit script to {script_path}")
+                except Exception as e:
+                    self.log_status(f"✗ Failed to write persistent script: {e}")
+
         elif success_count > 0:
             self.log_status(f"PARTIAL SUCCESS: Power limit set for {success_count}/{gpu_count} GPUs")
             messagebox.showwarning("Partial Success", f"Power limit set for {success_count}/{gpu_count} GPUs")

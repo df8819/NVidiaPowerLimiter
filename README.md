@@ -1,14 +1,12 @@
 # NVIDIA Power Limiter
 
-A simple GUI application for controlling NVIDIA GPU power limits on Linux using `nvidia-smi`.
+A simple GUI app for setting NVIDIA GPU power limits on Linux using `nvidia-smi` commands.  
 
 ## Features
 
-- **Power Limit Control**: Set GPU power limits from 0-1000W via slider or direct input
+- **Power Limit Control**: Set GPU power limits from 0-1000W
 - **Persistence Mode**: Option to make power limit changes permanent
-- **Multi-GPU Support**: Automatically detects and manages all NVIDIA GPUs
 - **Real-time Status**: Check current vs default power limits
-- **Clean Interface**: Built with tkinter for simplicity
 
 ## Requirements
 
@@ -20,23 +18,30 @@ A simple GUI application for controlling NVIDIA GPU power limits on Linux using 
 
 ## Usage
 
-Run with sudo privileges:
+- Run with sudo privileges:  
 ```bash
 sudo python3 nvidia_power_limiter.py
 ```
 
-Or use the provided launcher script:
+Or use the provided launcher script:  
 ```bash
 ./run.sh
 ```
 
 ## Setup
 
-**Important**: The `run.sh` script contains hardcoded paths and must be customized for your system:
-
-1. Edit `run.sh` and update the path/shell to match your installation directory
-2. Make the script executable: `chmod +x run.sh`
-3. Optionally update/edit/install the `.desktop` file for GUI launcher integration
+- Copy `nvidia-persistence.service` to `/etc/systemd/system/` and make it executable:  
+  `sudo chmod +x /etc/systemd/system/nvidia-persistence.service`
+- Enable and start the service:  
+  ```bash
+  sudo systemctl enable nvidia-persistence.service
+  sudo systemctl start nvidia-persistence.service
+  ```
+- Copy `set_gpu_power_limit.sh` to `/usr/local/bin/` and make it executable:  
+  `sudo chmod +x /usr/local/bin/set_gpu_power_limit.sh`
+- Edit `run.sh` to update the hardcoded paths for your system, then make it executable:  
+  `chmod +x run.sh`
+- (Optional) Edit or install the `.desktop` file for GUI launcher integration
 
 ## Screenshot
 ![NVIDIA Power Limiter Interface](2025-07-06-1751808507.png)
