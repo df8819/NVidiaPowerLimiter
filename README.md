@@ -26,7 +26,7 @@ sudo python3 nvidia_power_limiter.py
 ```bash
 ./run.sh
 ```
-- `Set Power Limit` with **unckecked** "Make permanent" checkbox will only changes running session.
+- `Set Power Limit` with **unckecked** "Make permanent" checkbox will only affect the running session.
 - `Set Power Limit` with **checked** "Make permanent" checkbox will also persists on reboots.
 
 ## Setup
