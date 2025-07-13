@@ -10,7 +10,7 @@ A simple GUI app for setting NVIDIA GPU power limits on Linux using `nvidia-smi`
 
 ## Requirements
 
-- Linux system
+- Linux system with **systemd**
 - NVIDIA GPU with drivers installed
 - `nvidia-smi` command available
 - Python 3 with tkinter
