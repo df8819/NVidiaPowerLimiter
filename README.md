@@ -16,14 +16,14 @@ A GUI for setting NVIDIA GPU Power Limits on Linux using `nvidia-smi` commands.
 ## Usage
 ##### Run-Option 1:
 cd into repo directory:  
-```bash
+  ```bash
 	sudo python3 nvidia_power_limiter.py
-```
+  ```
 ##### Run-Option 2:
 Use the provided launcher script from within repo directory:  
-```bash
+  ```bash
 	./run.sh
-```
+  ```
 ##### Run-Option 3:
 Use the .desktop link via launcher _(see Install/Setup)_
 #### Settings:
@@ -36,15 +36,15 @@ Use the .desktop link via launcher _(see Install/Setup)_
 	sudo chmod +x /etc/systemd/system/nvidia-persistence.service
   ```
   - Enable, start and check the service:
-  ```bash
+    ```bash
     sudo systemctl enable nvidia-persistence.service
     sudo systemctl start nvidia-persistence.service
     sudo systemctl status nvidia-persistence.service
-  ```
+    ```
 - sudo copy `set_gpu_power_limit.sh` to `/usr/local/bin/set_gpu_power_limit.sh` and make it executable:
-```bash
+  ```bash
 	sudo chmod +x /usr/local/bin/set_gpu_power_limit.sh
-```
+  ```
 - Make `run.sh` executable:
   ```bash
 	chmod +x run.sh
