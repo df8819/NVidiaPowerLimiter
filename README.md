@@ -1,48 +1,55 @@
 # NVIDIA Power Limiter
-
-A simple GUI app for setting NVIDIA GPU power limits on Linux using `nvidia-smi` commands.  
+A GUI for setting NVIDIA GPU Power Limits on Linux using `nvidia-smi` commands.  
 
 ## Features
-
 - **Power Limit Control**: Set GPU power limits from 0-1000W
 - **Persistence Mode**: Option to make power limit changes permanent
 - **Real-time Status**: Check current vs default power limits
 
 ## Requirements
-
 - Linux system with **systemd**
 - NVIDIA GPU with drivers installed
 - `nvidia-smi` command available
 - Python 3 with tkinter
-- Root/sudo privileges
+- sudo rights
 
 ## Usage
-
-- Run with sudo privileges:  
+##### Run-Option 1:
+cd into repo directory:  
 ```bash
-sudo python3 nvidia_power_limiter.py
+	sudo python3 nvidia_power_limiter.py
 ```
-- Or use the provided launcher script (change paths):  
+##### Run-Option 2:
+Use the provided launcher script from within repo directory:  
 ```bash
-./run.sh
+	./run.sh
 ```
-- `Set Power Limit` with **unckecked** "Make permanent" checkbox will only affect the running session.
-- `Set Power Limit` with **checked** "Make permanent" checkbox will also persist on reboot.
+##### Run-Option 3:
+Use the .desktop link via launcher _(see Install/Setup)_
+#### Settings:
+- `Set Power Limit` with **🔲 unckecked** "Make permanent" checkbox will **only affect the running session**.
+- `Set Power Limit` with **☑️ checked** "Make permanent" checkbox will also **persist on reboot**.
 
-## Setup
-
-- Copy `nvidia-persistence.service` to `/etc/systemd/system/` and make it executable:  
-  `sudo chmod +x /etc/systemd/system/nvidia-persistence.service`
-- Enable and start the service:  
+## Install/Setup
+- sudo copy `nvidia-persistence.service` to `/etc/systemd/system/nvidia-persistence.service` and make it executable:
   ```bash
-  sudo systemctl enable nvidia-persistence.service
-  sudo systemctl start nvidia-persistence.service
+	sudo chmod +x /etc/systemd/system/nvidia-persistence.service
   ```
-- Copy `set_gpu_power_limit.sh` to `/usr/local/bin/` and make it executable:  
-  `sudo chmod +x /usr/local/bin/set_gpu_power_limit.sh`
-- Edit `run.sh` to update the hardcoded paths for your system, then make it executable:  
-  `chmod +x run.sh`
-- (Optional) Edit or install the `.desktop` file for GUI launcher integration
+  - Enable, start and check the service:
+  ```bash
+    sudo systemctl enable nvidia-persistence.service
+    sudo systemctl start nvidia-persistence.service
+    sudo systemctl status nvidia-persistence.service
+  ```
+- sudo copy `set_gpu_power_limit.sh` to `/usr/local/bin/set_gpu_power_limit.sh` and make it executable:
+```bash
+	sudo chmod +x /usr/local/bin/set_gpu_power_limit.sh
+```
+- Make `run.sh` executable:
+  ```bash
+	chmod +x run.sh
+  ```
+- _(Optional)_ Edit the path and copy `nvidia-power-limiter.desktop` to `~/.local/share/applications/nvidia-power-limiter.desktop` file for launcher integration.
 
 ## Screenshot
-![NVIDIA Power Limiter Interface](2025-07-06-1751808507.png)
+![NVIDIA Power Limiter Interface](2025-07-06-1751808507.png "NVIDIA Power Limiter Interface")
